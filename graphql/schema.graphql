@@ -29,6 +29,15 @@ type Query {
     posts: [Post!]!
         @paginate(defaultCount: 10)
         @orderBy(column: "id", direction: "DESC")
+
+    postResolver(id: ID @eq): Post
+        @field(resolver: "App\\GraphQL\\Queries\\PostResolver")
+
+    # postsResolver: [Post!]!
+    # postsResolver: [Post!]!
+    #     @field(resolver: "App\\GraphQL\\Queries\\PostsResolver")
+    postsResolver: [Post!]!
+        @paginate(resolver: "App\\GraphQL\\Queries\\PostsResolver")
 }
 
 type Mutation {
@@ -43,6 +52,11 @@ type Mutation {
         body: String! @rules(apply: ["required", "min:3"])
     ): Post @update
     deletePost(id: ID! @eq): Post @delete
+    createPostResolver(
+        user_id: ID!
+        title: String! @rules(apply: ["required", "min:3"])
+        body: String! @rules(apply: ["required", "min:3"])
+    ): Post @field(resolver: "App\\GraphQL\\Mutations\\CreatePostResolver")
 }
 
 "Account of a person who utilizes this application."
